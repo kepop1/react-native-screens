@@ -1,5 +1,7 @@
 package com.swmansion.rnscreens;
 
+import android.animation.ObjectAnimator;
+import android.animation.StateListAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
@@ -42,7 +44,6 @@ public class ScreenStackFragment extends ScreenFragment {
 
   private AppBarLayout mAppBarLayout;
   private Toolbar mToolbar;
-  private boolean mShadowHidden;
 
   @SuppressLint("ValidFragment")
   public ScreenStackFragment(Screen screenView) {
@@ -68,9 +69,10 @@ public class ScreenStackFragment extends ScreenFragment {
   }
 
   public void setToolbarShadowHidden(boolean hidden) {
-    if (mShadowHidden != hidden) {
-      mAppBarLayout.setTargetElevation(hidden ? 0 : TOOLBAR_ELEVATION);
-      mShadowHidden = hidden;
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
+      StateListAnimator stateListAnimator = new StateListAnimator();
+      stateListAnimator.addState(new int[0], ObjectAnimator.ofFloat(mAppBarLayout, "elevation",hidden ?  0 : TOOLBAR_ELEVATION));
+      mAppBarLayout.setStateListAnimator(stateListAnimator);
     }
   }
 
